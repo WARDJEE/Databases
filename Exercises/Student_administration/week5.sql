@@ -132,3 +132,31 @@ SELECT zip, COUNT(student_id) "Number of students"
 FROM students
 GROUP BY zip
 HAVING COUNT(student_id) > 5;
+
+--oefening 20
+SELECT c.course_no, c.description
+FROM courses c
+LEFT JOIN sections se ON c.course_no = se.course_no
+WHERE se.course_no IS NULL
+ORDER BY c.course_no;
+
+--oefening 21
+SELECT c.description, c.prerequisite prereq, se.section_id, se.location
+FROM courses c
+LEFT JOIN sections se ON c.course_no = se.course_no
+WHERE c.prerequisite = 350;
+
+--oefening 22
+SELECT CONCAT(i.last_name, ' ', i.first_name) "name lecturer", z.state
+FROM instructors i
+LEFT JOIN sections se ON i.instructor_id = se.instructor_id
+LEFT JOIN zipcodes z ON i.zip = z.zip
+WHERE se.section_id IS NULL;
+
+--oefening 23
+SELECT se.section_id, c.description unpopular_courses
+FROM sections se
+LEFT JOIN enrollments e ON se.section_id = e.section_id
+JOIN courses c ON se.course_no = c.course_no
+WHERE e.enroll_date IS NULL
+ORDER BY se.section_id;
