@@ -10,11 +10,14 @@
     <file url="file://$PROJECT_DIR$/Exercises/Part07.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/Exercises/Part08.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/Exercises/Part09.sql" dialect="PostgreSQL" />
-    <file url="file://$PROJECT_DIR$/Exercises/Student_administration/Extra.sql" dialect="PostgreSQL" />
-    <file url="file://$PROJECT_DIR$/Exercises/Student_administration/week2.sql" dialect="PostgreSQL" />
-    <file url="file://$PROJECT_DIR$/Exercises/Student_administration/week3.sql" dialect="PostgreSQL" />
-    <file url="file://$PROJECT_DIR$/Exercises/Student_administration/week4.sql" dialect="PostgreSQL" />
-    <file url="file://$PROJECT_DIR$/Exercises/Student_administration/week5.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/Exercises/Part10.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/Exercises/Student_administration/Extra_P1.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/Exercises/Student_administration/week02.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/Exercises/Student_administration/week03.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/Exercises/Student_administration/week04.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/Exercises/Student_administration/week05.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/Exercises/Student_administration/week07.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/Exercises/Student_administration/week08.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/Scripts/_pg_ENTERPRISE_BIG_EN.sql" dialect="PostgreSQL" />
     <file url="PROJECT" dialect="PostgreSQL" />
   </component>
