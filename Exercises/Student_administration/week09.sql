@@ -251,8 +251,11 @@ WHERE LOWER(grade_type_code) = 'pa'
 
 -- Oefening 9
 -- Geef een lijst van de studenten met nummer 123, 161 en 190 en hun resp. registratiedatum in volgende formaten
-SELECT last_name, registration_date, TO_CHAR(registration_date, 'dd-mm-yyyy') "REG.DATE", TO_CHAR(registration_date, 'dy') as day
-    FROM students
+SELECT last_name,
+       registration_date,
+       TO_CHAR(registration_date, 'dd-mm-yyyy') "REG.DATE",
+       TO_CHAR(registration_date, 'dy') AS      day
+FROM students
 WHERE student_id IN (123, 161, 190);
 
 -- Oefening 10
@@ -260,5 +263,135 @@ WHERE student_id IN (123, 161, 190);
 -- Indien er geen kost gekend is vermeld je ‘onbekende kost’.
 -- Sorteer van groot naar klein.
 SELECT course_no, COALESCE(TO_CHAR(cost, '9999'), 'onbekende kost') "Kost"
+FROM courses
+WHERE course_no > 300
+ORDER BY 2;
+
+-- Oefening 11
+-- Geef een overzicht van de studenten met een achternaam beginnende met ‘E’. Bekijk eerst aandachtig de resultatentabel.
+SELECT CONCAT_WS(' ', SUBSTRING(first_name, 1, 1), last_name)
+FROM students
+WHERE last_name LIKE 'E%'
+ORDER BY last_name;
+
+-- Oefening 12
+-- Geef alle studenten die een ‘.’ in hun voornaam hebben en die aangesproken wordt als ‘Ms.’
+-- Sorteer op achternaam, die met de minste letters eerst.
+SELECT student_id, salutation, first_name, last_name
+FROM students
+WHERE first_name LIKE '%.%'
+  AND salutation = 'Ms.'
+ORDER BY LENGTH(last_name);
+
+-- Oefening 13
+-- Welke studenten hebben de letter Y in hun voornaam én wonen op een locatie met een postcode
+-- gelijk aan 10025 of hebben een achternaam waarvan de eerste letter zich tussen W en Z bevindt?
+SELECT student_id, first_name voornbaam, last_name achternaam, zip
+FROM students
+WHERE LOWER(first_name) LIKE '%y%'
+    AND zip = '10025'
+   OR SUBSTRING(last_name, 1, 1) BETWEEN 'W' AND 'Z'
+ORDER BY student_id;
+
+-- Oefening 14
+-- Geef de omschrijving van de cursussen die beginnen met ‘Intro to’ en die geen enkele prerequisite hebben.
+SELECT description, prerequisite
+FROM courses
+WHERE description LIKE 'Intro to%'
+  AND prerequisite IS NULL;
+
+-- Oefening 15
+-- Laat het system tellen hoeveel letters er staan in de volgende tekst:
+-- ’Ik tel zoveel letters in totaal’. Zie onderstaand resultaat.
+SELECT LENGTH('Ik tel zoveel letters in totaal') "Totaal";
+
+-- Oefening 16
+-- Geef alle studenten die aangesproken wordt als ‘Ms.’ En die ofwel ‘Allende’ ofwel ‘Grant’ noemen.
+-- Sorteer op achternaam, die met de minste letters eerst.
+SELECT student_id, salutation, first_name, last_name
+FROM students
+WHERE salutation = 'Ms.'
+  AND LOWER(last_name) IN ('grant', 'allende');
+
+-- Oefening 17
+-- Geef een overzicht van alle instructeurs die in hun achternaam de letter o op de 2de plaats hebben.
+SELECT last_name "LAST NAME", first_name "FIRST NAME"
+FROM instructors
+WHERE last_name LIKE '_o%';
+-- POSITION('o' IN last_name) = 2
+
+-- Oefening 18
+-- Toon met onderstaande schrijfwijze de datum van vandaag.
+-- (uiteraard krijg je een ander resultaat, afhankelijk van de dag)
+SELECT 'vandaag is het ' || RPAD(TO_CHAR(CURRENT_DATE, 'dd/mm/yyyy'), 14, '*') "Welke dag zijn we?";
+
+-- Oefening 19
+-- Toon met onderstaande schrijfwijze de datum van vandaag.
+SELECT CONCAT_WS(' ','vandaag is het', RPAD(TO_CHAR(CURRENT_DATE, 'FMDay'), 10, '*'), 'de', TO_CHAR(CURRENT_DATE, 'ddTH')) "Welke dag zijn we?";
+
+-- Oefening 20
+-- Schrijf nu een query die in de description kolom het woord ‘Java’ vervangt door ‘C#’
+SELECT course_no, REPLACE(description, 'Java', 'C#')
     FROM courses
-WHERE course_no > 300;
+    WHERE description LIKE '%Java%'
+ORDER BY course_no;
+
+-- Oefening 21
+-- Ga in de tabel GRADE_TYPE_WEIGHTS op zoek naar rijen waarvoor CREATED_DATE gelijk is aan MODIFIED_DATE.
+-- Maak gebruik van de NULLIF functie.
+SELECT section_id, grade_type_code, created_date, modified_date
+    FROM grade_type_weights
+WHERE NULLIF(created_date, modified_date) IS NULL;
+
+-- Oefening 22
+-- a. Geef voor alle cursussen met het woord ‘Intro’ in hun beschrijving de prerequisite.
+--    Indien geen voorkennis vereist, moet de melding ‘geen voorkennis’ getoond worden.
+SELECT course_no, description, COALESCE(TO_CHAR(prerequisite, 'FM99999'), 'geen voorkennis nodig')
+    FROM courses
+WHERE description LIKE 'Intro%'
+ORDER BY course_no;
+
+-- b. Geef voor alle cursussen met het woord ‘Intro’ in hun beschrijving weer of voorkennis vereist is of niet.
+-- Wanneer voorkennis vereist is moet de tekst ‘opgelet prerequisite’ + de prerequisite getoond worden.
+SELECT course_no, description, CASE WHEN prerequisite IS NULL THEN 'Geen voorkennis nodig'
+ELSE CONCAT('Opgelet prerequisite nodig van ', prerequisite) END "case"
+    FROM courses
+WHERE description LIKE 'Intro%'
+ORDER BY course_no;
+
+-- c. De punten voor ProjectAdministratie (grade_type_code=’PA’) moeten herleid worden naar 20.
+-- Er moet afgerond worden tot op het geheel. Resultaat is slechts een deel van de output.
+SELECT student_id, section_id, grade_type_code, ROUND(numeric_grade/5) numeric_grade_op_20
+    FROM grades
+WHERE LOWER(grade_type_code) = 'pa'
+ORDER BY student_id;
+
+-- Oefening 23
+-- Hoeveel maanden is dit academiejaar reeds bezig (uiteraard krijg je een ander resultaat, afhankelijk van de dag)
+SELECT EXTRACT(Month FROM AGE (CURRENT_DATE,'01/09/2025')) "maanden al bezig";
+
+-- Oefening 24
+-- a. Bepaal voor de sections tussen 80 en 89 (beide incl) op welke dag ze starten.
+-- Let op de schrijfwijze van de datums!
+SELECT section_id, TO_CHAR(start_date_time, 'dd/mm/yyyy day') start_date_time
+    FROM sections
+WHERE section_id BETWEEN  80 AND 89;
+
+-- b. Bovenstaande sections zullen om praktische redenen uiteindelijk de eerste maandag na de voorziene startdatum beginnen.
+-- Geef onderstaande aangepaste resultatentabel.
+-- (Opgelet: de inhoud van de databank moet niet aangepast worden)
+SELECT section_id, start_date_time, TO_CHAR(start_date_time + (9 - CAST(TO_CHAR(start_date_time, 'D') AS INTEGER)), 'fmday dd/mm/yyyy') new_start_date
+    FROM sections
+WHERE section_id BETWEEN  80 AND 89;
+
+-- 25. tip: bekijk de format masks in de cursus ‘databanken 1’
+-- a. Geef een overzicht van de inschrijvingen voor section 117.
+-- Let op de manier waarop de datum is geschreven.
+SELECT student_id, section_id, TO_CHAR(enroll_date, 'dd day yyyy')
+    FROM enrollments
+WHERE section_id = 117;
+
+-- b. Pas de datum uit bovenstaande query aan zodat je de volgende resultatentabel krijgt:
+SELECT student_id, section_id, CONCAT_WS(' ', 'the', TO_CHAR(enroll_date, 'ddth'), 'in the', TO_CHAR(enroll_date, 'wwth'), 'week of the year', TO_CHAR(enroll_date, 'yyyy'))
+FROM enrollments
+WHERE section_id = 117;
