@@ -187,6 +187,43 @@ WHERE UPPER(description) ='INTRO TO SQL'
 -- Resultaat: 0 rows deleted.
 -- View bevat alleen descriptions met program erin --
 
+-- Oefening 2
+-- a. Voer de volgende instructie uit:
+CREATE OR REPLACE VIEW v_sections
+AS SELECT c.*,section_id
+FROM courses c
+JOIN sections s ON s.course_no=c.course_no;
+
+-- Verwijder nu uit de tabel COURSES het attribuut MODIFIED_DATE.
+ALTER TABLE courses
+    DROP COLUMN modified_date;
+-- Wat merk je?
+-- Gaat niet omdat deze kollom wordt gerbuikt in een view --
+
+-- b. Voer de volgende instructie uit:
+CREATE OR REPLACE VIEW v_students
+AS SELECT *
+FROM students
+WHERE zip='07010';
+
+-- Voeg het attribuut EMAIL (30 karakters) toe aan de onderliggende tabel STUDENTS.
+ALTER TABLE students
+    ADD email VARCHAR(30);
+
+-- Selecteer vervolgens op de view.
+SELECT * FROM v_students;
+
+-- Wat merk je?
+-- email staat niet in de view --
+-- Hoe bekijk je de definitie van de view?
+select pg_get_viewdef('v_students', true);
+
+-- Wat is de oorzaak van het probleem?
+-- email is pas toegevoegd nadat je de view hebt gemaakt en is er dus niet in opgeslagen --
+-- Hoe los je het op?
+-- De view terug laten runnen --
+
+-- Oefening 3
 
 
 
