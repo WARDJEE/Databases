@@ -192,7 +192,7 @@ WHERE UPPER(description) = 'INTRO TO SQL';
 -- a. Voer de volgende instructie uit:
 CREATE OR REPLACE VIEW v_sections
 AS
-SELECT c.*, section_id
+SELECT c.*, s.section_id
 FROM courses c
          JOIN sections s ON s.course_no = c.course_no;
 
