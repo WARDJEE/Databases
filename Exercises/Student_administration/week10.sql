@@ -180,8 +180,9 @@ WHERE UPPER(description) = 'PROGRAMMING TECHNIQUES';
 -- Omdat cost niet bestaat in de view --
 
 -- c. voer de volgende instructie uit :
-DELETE FROM v_programming_courses
-WHERE UPPER(description) ='INTRO TO SQL'
+DELETE
+FROM v_programming_courses
+WHERE UPPER(description) = 'INTRO TO SQL'
 
 -- Waarom lukt de DML instructie niet?
 -- Resultaat: 0 rows deleted.
@@ -190,9 +191,10 @@ WHERE UPPER(description) ='INTRO TO SQL'
 -- Oefening 2
 -- a. Voer de volgende instructie uit:
 CREATE OR REPLACE VIEW v_sections
-AS SELECT c.*,section_id
+AS
+SELECT c.*, section_id
 FROM courses c
-JOIN sections s ON s.course_no=c.course_no;
+         JOIN sections s ON s.course_no = c.course_no;
 
 -- Verwijder nu uit de tabel COURSES het attribuut MODIFIED_DATE.
 ALTER TABLE courses
@@ -202,16 +204,18 @@ ALTER TABLE courses
 
 -- b. Voer de volgende instructie uit:
 CREATE OR REPLACE VIEW v_students
-AS SELECT *
+AS
+SELECT *
 FROM students
-WHERE zip='07010';
+WHERE zip = '07010';
 
 -- Voeg het attribuut EMAIL (30 karakters) toe aan de onderliggende tabel STUDENTS.
 ALTER TABLE students
     ADD email VARCHAR(30);
 
 -- Selecteer vervolgens op de view.
-SELECT * FROM v_students;
+SELECT *
+FROM v_students;
 
 -- Wat merk je?
 -- email staat niet in de view --
@@ -224,6 +228,63 @@ select pg_get_viewdef('v_students', true);
 -- De view terug laten runnen --
 
 -- Oefening 3
+-- a. Creëer een view V_CHEAP_COURSES waarin je alle informatie toont over cursussen die minder dan 1095 kosten.
+CREATE OR REPLACE VIEW v_cheap_courses AS
+SELECT *
+FROM courses
+WHERE cost < 1100;
+
+-- b. Voer nu via de view de volgende rij toe aan de tabel COURSES:
+-- COURSE_NO 900
+-- DESCRIPTION ‘Expensive’
+-- COST 2000
+-- CREATED_BY ‘Me’
+-- CREATED_DATE SYSDATE
+-- MODIFIED_BY ‘Me’
+INSERT INTO v_cheap_courses (course_no, description, cost, created_by, created_date, modified_by)
+VALUES (900, 'Expensive', 2000, 'Me', CURRENT_DATE, 'Me');
+
+-- c. Controleer via de view of de nieuwe rij is toegevoegd
+SELECT *
+FROM v_cheap_courses;
+
+-- Wat merk je?
+-- Rij is niet toegevoegd --
+
+-- d. Controleer in de tabel COURSES of de rij is toegevoegd.
+SELECT *
+FROM courses
+WHERE course_no = 900;
+
+-- e. Pas de view definitie aan zodat dergelijke rij in de toekomst niet meer via de view kan toegevoegd worden?
+-- Je moet de informatie over de toegevoegde optie in de data dictionary kunnen terugvinden.
+CREATE OR REPLACE VIEW v_cheap_courses AS
+SELECT *
+FROM courses
+WHERE cost < 1100
+WITH CHECK OPTION;
+
+-- f. Controleer of je aanpassing werkt.
+-- Verwijder eerst uit de tabel COURSES de cursus met COURSE_NO 900.
+DELETE
+FROM courses
+WHERE course_no = 900;
+-- Voer daarna bovenstaande insert opnieuw uit op de view.
+INSERT INTO v_cheap_courses (course_no, description, cost, created_by, created_date, modified_by)
+VALUES (900, 'Expensive', 2000, 'Me', CURRENT_DATE, 'Me');
+
+-- Vaststelling?
+-- Nu gaat het niet meer --
+
+-- Oefening 4
+-- a. Probeer een update via de view: Lukt dit?
+
+-- b. Met welk soort view hebben we hier te maken?
+
+-- c. Welke DML instructies kunnen er via deze view uitgevoerd worden op onderliggende tabellen? INSERT? UPDATE? DELETE?
+
+-- d. Hoe kan je dit controleren
+
 
 
 
