@@ -182,7 +182,7 @@ WHERE UPPER(description) = 'PROGRAMMING TECHNIQUES';
 -- c. voer de volgende instructie uit :
 DELETE
 FROM v_programming_courses
-WHERE UPPER(description) = 'INTRO TO SQL'
+WHERE UPPER(description) = 'INTRO TO SQL';
 
 -- Waarom lukt de DML instructie niet?
 -- Resultaat: 0 rows deleted.
